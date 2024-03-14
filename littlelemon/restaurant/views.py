@@ -5,7 +5,8 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import viewsets, generics, permissions
 from rest_framework.generics import ListCreateAPIView
-from rest_framework.decorators import api_view
+from rest_framework.decorators import api_view, permission_classes
+from rest_framework.permissions import IsAuthenticated
 
 
 from .models import *
@@ -46,6 +47,7 @@ class UserViewSet(viewsets.ModelViewSet):
     
 
 class MenuItemsView(generics.ListCreateAPIView):
+    permission_classes = [IsAuthenticated]
     queryset = Menu.objects.all()
     serializer_class = menuSerializer
 
@@ -55,10 +57,15 @@ class SingleMenuItemView(generics.RetrieveUpdateAPIView, generics.DestroyAPIView
     
     
 class BookingViewSet(viewsets.ModelViewSet):
+   Permission_classes = [IsAuthenticated]
    queryset = Booking.objects.all()
    serializer_class = bookingSerializer
    permission_classes = [permissions.IsAuthenticated] 
     
-            
+@api_view()
+@permission_classes([IsAuthenticated])
+#@authentication_classes([TokenAuthentication])
+def msg(request):
+    return Response({"message":"This view is protected"})    
         
         
